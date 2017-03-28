@@ -28,6 +28,7 @@ class MainApplication:
         img = Image.open("Frame001.png")
         photo = ImageTk.PhotoImage(img)
         pic = Label(third_frame, image=photo)
+        pic.image = photo
 
         # Buttons
         open_btn = Button(first_frame, text="Open")
