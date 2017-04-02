@@ -1,8 +1,9 @@
 from tkinter import *
 from PIL import Image, ImageTk
+from tkinter.filedialog import askdirectory
 
 
-class MainApplication:
+class MainApplication(Frame):
     def __init__(self, master):
         self.master = master
         master.title("CellTracker")
@@ -29,11 +30,14 @@ class MainApplication:
         photo = ImageTk.PhotoImage(img)
         pic = Label(third_frame, image=photo)
         pic.image = photo
+        self.currentFrame = 1
+        self.timerStarted = False
 
         # Buttons
-        open_btn = Button(first_frame, text="Open")
+        open_btn = Button(first_frame, text="Open", command=self.load_images)
         save_btn = Button(first_frame, text="Save")
-        start_btn = Button(first_frame, text="Start")
+        start_btn = Button(first_frame, text="Start",
+                           command=self.btn_start_event)
         track_btn = Button(first_frame, text="Track")
         pause_btn = Button(first_frame, text="Pause")
         trk_one_btn = Button(first_frame, text="Track One Frame")
@@ -56,9 +60,9 @@ class MainApplication:
         bc_start_btn = Button(first_frame, text="Start")
 
         # Text box
-        instruction = "Instructional text \n will display in this text box. \n"
-        inst = Label(second_frame, text=instruction, relief=RIDGE, height=15,
-                     width=32)
+        instruction = "Click Open to load frames"
+        self.inst = Label(second_frame, text=instruction, relief=RIDGE,
+                          height=15, width=32)
 
         open_btn.grid(row=0, column=0, columnspan=2)
         save_btn.grid(row=0, column=1, columnspan=2)
@@ -76,8 +80,32 @@ class MainApplication:
         comp_end_btn.grid(row=8, column=1)
         blastocyst_label.grid(row=7, column=2)
         bc_start_btn.grid(row=8, column=2)
-        inst.grid()
+        self.inst.grid()
         pic.grid()
+
+    def load_images(self):
+        dir_name = askdirectory()
+        dataset_root = dir_name
+        self.inst.config(text="Press Start to Track")
+        print(dataset_root)
+        return dataset_root
+
+    def set_current_frame(value):
+        print(dataset_root)
+        filename = dataset_root + "Frame"+str(value).zfill(3)
+        +".png"
+        image = Image.open(filename)
+        pic.paste(im=image)
+
+    def timer_event(self):
+        self.set_current_frame(self.currentFrame)
+        if timerStarted:
+            self.after(100, self.timer_event())
+
+    def btn_start_event(self):
+        self.timerStarted = True
+        self.after(100, self.timer_event())
+
 
 if __name__ == "__main__":
     root = Tk()
