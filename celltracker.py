@@ -28,8 +28,8 @@ class MainApplication(Frame):
     # Images
         img = Image.open("Frame001.png")
         photo = ImageTk.PhotoImage(img)
-        pic = Label(third_frame, image=photo)
-        pic.image = photo
+        self.pic = Label(third_frame, image=photo)
+        self.pic.image = photo
         self.currentFrame = 1
         self.timerStarted = False
 
@@ -81,25 +81,25 @@ class MainApplication(Frame):
         blastocyst_label.grid(row=7, column=2)
         bc_start_btn.grid(row=8, column=2)
         self.inst.grid()
-        pic.grid()
+        self.pic.grid()
 
     def load_images(self):
-        dir_name = askdirectory()
-        dataset_root = dir_name
+        self.dir_name = askdirectory()
+        self.dataset_root = self.dir_name
         self.inst.config(text="Press Start to Track")
-        print(dataset_root)
-        return dataset_root
 
-    def set_current_frame(value):
-        print(dataset_root)
-        filename = dataset_root + "Frame"+str(value).zfill(3)
-        +".png"
-        image = Image.open(filename)
-        pic.paste(im=image)
+    def set_current_frame(self, value):
+        filename = self.dataset_root + "/Frame" + str(value).zfill(3) + ".png"
+        print(filename)
+        embryo_img = Image.open(filename)
+        embryo_photo = ImageTk.PhotoImage(embryo_img)
+        self.pic.config(image=embryo_photo)
+        self.pic.image = embryo_photo
 
     def timer_event(self):
+        self.currentFrame += 1
         self.set_current_frame(self.currentFrame)
-        if timerStarted:
+        if self.timerStarted:
             self.after(100, self.timer_event())
 
     def btn_start_event(self):
