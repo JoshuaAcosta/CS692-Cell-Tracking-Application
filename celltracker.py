@@ -90,7 +90,6 @@ class MainApplication(Frame):
 
     def set_current_frame(self, value):
         filename = self.dataset_root + "/Frame" + str(value).zfill(3) + ".png"
-        print(filename)
         embryo_img = Image.open(filename)
         embryo_photo = ImageTk.PhotoImage(embryo_img)
         self.pic.config(image=embryo_photo)
