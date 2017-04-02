@@ -48,7 +48,7 @@ class MainApplication(Frame):
         current_label = Label(first_frame, text="Current Frame:")
 
         number = Label(first_frame, text="1")
-        current_frame_num = Label(first_frame, text="1")
+        self.current_frame_num = Label(first_frame, text=str(self.currentFrame))
 
         # Compaction
         compaction_label = Label(first_frame, text="Compaction")
@@ -69,7 +69,7 @@ class MainApplication(Frame):
         number_label.grid(row=1, column=0)
         current_label.grid(row=2, column=0)
         number.grid(row=1, column=1)
-        current_frame_num.grid(row=2, column=1)
+        self.current_frame_num.grid(row=2, column=1)
         start_btn.grid(row=3, column=0, columnspan=2)
         track_btn.grid(row=4, column=0, columnspan=2)
         pause_btn.grid(row=4, column=1, columnspan=2)
@@ -97,6 +97,7 @@ class MainApplication(Frame):
 
     def timer_event(self):
         self.currentFrame += 1
+        self.current_frame_num.config(text=str(self.currentFrame))
         self.set_current_frame(self.currentFrame)
         if self.timerStarted:
             self.after(100, self.timer_event())
