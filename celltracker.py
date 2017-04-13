@@ -48,7 +48,8 @@ class MainApplication(Frame):
         current_label = Label(first_frame, text="Current Frame:")
 
         number = Label(first_frame, text="1")
-        self.current_frame_num = Label(first_frame, text=str(self.currentFrame))
+        self.current_frame_num = Label(first_frame, text=str(self.currentFrame
+                                                             ))
 
         # Compaction
         compaction_label = Label(first_frame, text="Compaction")
@@ -62,7 +63,10 @@ class MainApplication(Frame):
         # Text box
         instruction = "Click Open to load frames"
         self.inst = Label(second_frame, text=instruction, relief=RIDGE,
-                          height=15, width=32)
+                          height=13, width=32)
+
+        back_btn = Button(first_frame, text="Back")
+        next_btn = Button(first_frame, text="Next")
 
         open_btn.grid(row=0, column=0, columnspan=2)
         save_btn.grid(row=0, column=1, columnspan=2)
@@ -80,6 +84,8 @@ class MainApplication(Frame):
         comp_end_btn.grid(row=8, column=1)
         blastocyst_label.grid(row=7, column=2)
         bc_start_btn.grid(row=8, column=2)
+        back_btn.grid(row=9, column=0, columnspan=2)
+        next_btn.grid(row=9, column=1, columnspan=2)
         self.inst.grid()
         self.pic.grid()
 
