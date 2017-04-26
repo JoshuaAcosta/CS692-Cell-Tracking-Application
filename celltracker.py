@@ -1,6 +1,7 @@
-from tkinter import *
+from Tkinter import *
 from PIL import Image, ImageTk
-from tkinter.filedialog import askdirectory
+from tkFileDialog import askdirectory, asksaveasfile
+import os
 
 
 class MainApplication(Frame):
@@ -26,16 +27,16 @@ class MainApplication(Frame):
                          sticky=W+E+N+S)
 
     # Images
-        img = Image.open("Frame001.png")
+        img = Image.open("Frame158.png")
         photo = ImageTk.PhotoImage(img)
         self.pic = Label(third_frame, image=photo)
         self.pic.image = photo
-        self.currentFrame = 1
+        self.currentFrame = 0
         self.timerStarted = False
 
         # Buttons
         open_btn = Button(first_frame, text="Open", command=self.load_images)
-        save_btn = Button(first_frame, text="Save")
+        save_btn = Button(first_frame, text="Save", command=self.save_txt_file)
         start_btn = Button(first_frame, text="Start",
                            command=self.btn_start_event)
         track_btn = Button(first_frame, text="Track")
@@ -46,8 +47,8 @@ class MainApplication(Frame):
         # Frame Labels
         number_label = Label(first_frame, text="N. of Frames:")
         current_label = Label(first_frame, text="Current Frame:")
-
-        number = Label(first_frame, text="1")
+        num_text = 0
+        number = Label(first_frame, text=num_text)
         self.current_frame_num = Label(first_frame, text=str(self.currentFrame
                                                              ))
 
@@ -65,9 +66,6 @@ class MainApplication(Frame):
         self.inst = Label(second_frame, text=instruction, relief=RIDGE,
                           height=13, width=32)
 
-        back_btn = Button(first_frame, text="Back")
-        next_btn = Button(first_frame, text="Next")
-
         open_btn.grid(row=0, column=0, columnspan=2)
         save_btn.grid(row=0, column=1, columnspan=2)
         number_label.grid(row=1, column=0)
@@ -84,14 +82,22 @@ class MainApplication(Frame):
         comp_end_btn.grid(row=8, column=1)
         blastocyst_label.grid(row=7, column=2)
         bc_start_btn.grid(row=8, column=2)
-        back_btn.grid(row=9, column=0, columnspan=2)
-        next_btn.grid(row=9, column=1, columnspan=2)
         self.inst.grid()
         self.pic.grid()
 
     def load_images(self):
+        """
+        Loads .png files from selected directory to an array
+        and sets new instructions
+        """
         self.dir_name = askdirectory()
         self.dataset_root = self.dir_name
+        items = os.listdir(self.dataset_root)
+        newlist = []
+        for names in items:
+            if names.endswith(".png"):
+                newlist.append(names)
+        print len(newlist)
         self.inst.config(text="Press Start to Track")
 
     def set_current_frame(self, value):
@@ -111,6 +117,9 @@ class MainApplication(Frame):
     def btn_start_event(self):
         self.timerStarted = True
         self.after(100, self.timer_event())
+
+    def save_txt_file(self):
+        self.save_txt = asksaveasfile(defaultextension="txt")
 
 
 if __name__ == "__main__":
