@@ -27,7 +27,7 @@ class MainApplication(Frame):
                          sticky=W+E+N+S)
 
     # Images
-        img = Image.open("Frame158.png")
+        img = Image.open("blank.png")
         photo = ImageTk.PhotoImage(img)
         self.pic = Label(third_frame, image=photo)
         self.pic.image = photo
@@ -48,7 +48,7 @@ class MainApplication(Frame):
         number_label = Label(first_frame, text="N. of Frames:")
         current_label = Label(first_frame, text="Current Frame:")
         num_text = 0
-        number = Label(first_frame, text=num_text)
+        self.number = Label(first_frame, text= num_text)
         self.current_frame_num = Label(first_frame, text=str(self.currentFrame
                                                              ))
 
@@ -70,7 +70,7 @@ class MainApplication(Frame):
         save_btn.grid(row=0, column=1, columnspan=2)
         number_label.grid(row=1, column=0)
         current_label.grid(row=2, column=0)
-        number.grid(row=1, column=1)
+        self.number.grid(row=1, column=1)
         self.current_frame_num.grid(row=2, column=1)
         start_btn.grid(row=3, column=0, columnspan=2)
         track_btn.grid(row=4, column=0, columnspan=2)
@@ -93,11 +93,12 @@ class MainApplication(Frame):
         self.dir_name = askdirectory()
         self.dataset_root = self.dir_name
         items = os.listdir(self.dataset_root)
-        newlist = []
+        image_list = []
         for names in items:
             if names.endswith(".png"):
-                newlist.append(names)
-        print len(newlist)
+                image_list.append(names)
+        length_img_list = str(len(image_list))
+        self.number.config(text=length_img_list)
         self.inst.config(text="Press Start to Track")
 
     def set_current_frame(self, value):
