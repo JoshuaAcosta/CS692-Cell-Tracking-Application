@@ -27,7 +27,7 @@ class MainApplication(Frame):
                          sticky=W+E+N+S)
 
     # Images
-        img = Image.open("blank.png")
+        img = Image.open("images/blank.png")
         photo = ImageTk.PhotoImage(img)
         self.pic = Label(third_frame, image=photo)
         self.pic.image = photo

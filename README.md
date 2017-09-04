@@ -1,13 +1,13 @@
 # embryo-mitosis-tracking
 
 
-<!-- !["How word2vec Works"](word2vec.png) -->
+!["Celltracker Application"](images/gui.png)
 
 ## Prerequisites
 
 * Python == 2.7.13
-* Opencv-python==3.2.0.7
-* Pillow==4.1.0
+* Opencv-python == 3.2.0.7
+* Pillow == 4.1.0
 
 
 ## How To Use
