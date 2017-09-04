@@ -31,7 +31,7 @@ class MainApplication(Frame):
         photo = ImageTk.PhotoImage(img)
         self.pic = Label(third_frame, image=photo)
         self.pic.image = photo
-        self.currentFrame = 0
+        self.current_frame = 0
         self.timerStarted = False
 
         # Buttons
@@ -49,7 +49,7 @@ class MainApplication(Frame):
         current_label = Label(first_frame, text="Current Frame:")
         num_text = 0
         self.number = Label(first_frame, text= num_text)
-        self.current_frame_num = Label(first_frame, text=str(self.currentFrame
+        self.current_frame_num = Label(first_frame, text=str(self.current_frame
                                                              ))
 
         # Compaction
@@ -91,33 +91,38 @@ class MainApplication(Frame):
         and sets new instructions
         """
         self.dir_name = askdirectory()
-        self.dataset_root = self.dir_name
-        items = os.listdir(self.dataset_root)
-        image_list = []
-        for names in items:
-            if names.endswith(".png"):
-                image_list.append(names)
-        length_img_list = str(len(image_list))
-        self.number.config(text=length_img_list)
-        self.inst.config(text="Press Start to Track")
+        if self.dir_name:
+            self.dataset_root = self.dir_name
+            items = os.listdir(self.dataset_root)
+            self.image_list = []
+            for names in items:
+                if names.endswith(".png"):
+                    self.image_list.append(names)
+            self.number.config(text=str(len(self.image_list)))
+            self.inst.config(text="Press Start to Track")
+            self.set_current_frame(self.current_frame)
 
     def set_current_frame(self, value):
-        filename = self.dataset_root + "/Frame" + str(value).zfill(3) + ".png"
+        #filename = self.dataset_root + "/Frame" + str(value).zfill(3) + ".png"
+        filename = self.dataset_root + "/" + self.image_list[self.current_frame]
         embryo_img = Image.open(filename)
         embryo_photo = ImageTk.PhotoImage(embryo_img)
         self.pic.config(image=embryo_photo)
         self.pic.image = embryo_photo
 
-    def timer_event(self):
-        self.currentFrame += 1
-        self.current_frame_num.config(text=str(self.currentFrame))
-        self.set_current_frame(self.currentFrame)
-        if self.timerStarted:
-            self.after(100, self.timer_event())
+#    def timer_event(self):
+#        self.current_frame += 1
+#        self.current_frame_num.config(text=str(self.current_frame))
+#        self.set_current_frame(self.current_frame)
+#        if self.timerStarted:
+#            self.after(100, self.timer_event())
 
     def btn_start_event(self):
-        self.timerStarted = True
-        self.after(100, self.timer_event())
+        #self.timerStarted = True
+        #self.after(100, self.timer_event())
+        """
+        Finds circle around cell on first image and updates instructions
+        """
 
     def save_txt_file(self):
         self.save_txt = asksaveasfile(defaultextension="txt")
