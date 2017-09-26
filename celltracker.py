@@ -2,6 +2,10 @@ from Tkinter import *
 from PIL import Image, ImageTk
 from tkFileDialog import askdirectory, asksaveasfile
 import os
+import numpy as np
+import cv2
+#import matplotlib.pyplot as plt
+#import matplotlib.image as mpimg
 
 
 class MainApplication(Frame):
@@ -26,7 +30,7 @@ class MainApplication(Frame):
         third_frame.grid(row=0, column=4, rowspan=9, columnspan=3,
                          sticky=W+E+N+S)
 
-    # Images
+        # Images
         img = Image.open("images/blank.png")
         photo = ImageTk.PhotoImage(img)
         self.pic = Label(third_frame, image=photo)
@@ -42,7 +46,8 @@ class MainApplication(Frame):
         track_btn = Button(first_frame, text="Track")
         pause_btn = Button(first_frame, text="Pause")
         trk_one_btn = Button(first_frame, text="Track One Frame")
-        divide_btn = Button(first_frame, text="Divide")
+        prev_btn = Button(first_frame, text="Prev", command=self.prev_btn_event)
+        next_btn = Button(first_frame, text="Next", command=self.next_btn_event)
 
         # Frame Labels
         number_label = Label(first_frame, text="N. of Frames:")
@@ -76,7 +81,8 @@ class MainApplication(Frame):
         track_btn.grid(row=4, column=0, columnspan=2)
         pause_btn.grid(row=4, column=1, columnspan=2)
         trk_one_btn.grid(row=5, column=0, columnspan=3)
-        divide_btn.grid(row=6, column=0, columnspan=3)
+        prev_btn.grid(row=6, column=0, columnspan=2)
+        next_btn.grid(row=6, column=1, columnspan=2)
         compaction_label.grid(row=7, column=0, columnspan=2)
         comp_start_btn.grid(row=8, column=0)
         comp_end_btn.grid(row=8, column=1)
@@ -104,8 +110,8 @@ class MainApplication(Frame):
 
     def set_current_frame(self, value):
         #filename = self.dataset_root + "/Frame" + str(value).zfill(3) + ".png"
-        filename = self.dataset_root + "/" + self.image_list[self.current_frame]
-        embryo_img = Image.open(filename)
+        self.filename = self.dataset_root + "/" + self.image_list[self.current_frame]
+        embryo_img = Image.open(self.filename)
         embryo_photo = ImageTk.PhotoImage(embryo_img)
         self.pic.config(image=embryo_photo)
         self.pic.image = embryo_photo
@@ -117,12 +123,47 @@ class MainApplication(Frame):
 #        if self.timerStarted:
 #            self.after(100, self.timer_event())
 
+    def circle(self, pic):
+        img = cv2.imread(pic,0)
+        cimg = cv2.GaussianBlur(img,(5,5),0)
+
+        circles = cv2.HoughCircles(cimg, cv2.HOUGH_GRADIENT,1,100,
+                                    param1=100,param2=30,minRadius=0,maxRadius=0)
+
+        circles = np.uint16(np.around(circles))
+        for i in circles[0,:]:
+            # draw the outer circle
+            cv2.circle(cimg,(i[0],i[1]),i[2],(255,255,0),3)
+            # draw the center of the circle
+            cv2.circle(cimg,(i[0],i[1]),2,(255,255,0),3)
+
+        """plt.imshow(cimg, cmap = 'gray')
+        plt.xticks([]), plt.yticks([])
+        plt.show()
+
+        self.pic.config(image=cimg)
+        self.pic.image = cimg
+        """
+
     def btn_start_event(self):
         #self.timerStarted = True
         #self.after(100, self.timer_event())
         """
         Finds circle around cell on first image and updates instructions
         """
+        self.circle(self.dataset_root + "/" + self.image_list[self.current_frame])
+
+    def prev_btn_event(self):
+        if self.current_frame > 0:
+            self.current_frame -= 1
+            self.current_frame_num.config(text=str(self.current_frame))
+            self.set_current_frame(self.current_frame)
+
+    def next_btn_event(self):
+        if self.current_frame < len(self.image_list):
+            self.current_frame += 1
+            self.current_frame_num.config(text=str(self.current_frame))
+            self.set_current_frame(self.current_frame)
 
     def save_txt_file(self):
         self.save_txt = asksaveasfile(defaultextension="txt")
