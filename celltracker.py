@@ -4,8 +4,6 @@ from tkFileDialog import askdirectory, asksaveasfile
 import os
 import numpy as np
 import cv2
-#import matplotlib.pyplot as plt
-#import matplotlib.image as mpimg
 
 
 class MainApplication(Frame):
@@ -132,22 +130,19 @@ class MainApplication(Frame):
 
         circles = np.uint16(np.around(circles))
         for i in circles[0,:]:
+            print i[0],i[1],i[2]
             # draw the outer circle
             cv2.circle(cimg,(i[0],i[1]),i[2],(255,255,0),3)
             # draw the center of the circle
             cv2.circle(cimg,(i[0],i[1]),2,(255,255,0),3)
 
-        """plt.imshow(cimg, cmap = 'gray')
-        plt.xticks([]), plt.yticks([])
-        plt.show()
+        cimg_image = Image.fromarray(cimg)
+        cimg_image_tk = ImageTk.PhotoImage(cimg_image)
 
-        self.pic.config(image=cimg)
-        self.pic.image = cimg
-        """
+        self.pic.config(image=cimg_image_tk)
+        self.pic.image = cimg_image_tk
 
     def btn_start_event(self):
-        #self.timerStarted = True
-        #self.after(100, self.timer_event())
         """
         Finds circle around cell on first image and updates instructions
         """
